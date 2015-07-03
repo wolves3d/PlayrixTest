@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<Resources>
+	<FreeTypeFonts group="TestGroup" upload="false">
+		<font name="arial" family="arial" size="12" color="255;255;255;255" letterSpacing="0">
+			<Effect alpha="0.1" type="shadow" blurX="2" blurY="2" strength="50" angle="0" inner="false" color="0;0;0;255" offset="0"/>
+		</font>
+	</FreeTypeFonts>
+	<Textures>
+		<texture id="Circle" path="textures/circle.png" group="TestGroup" upload="false"/>
+		<texture id="cur_normal" path="textures/cur_normal.png" group="TestGroup" upload="false"/>
+		<texture id="btnStart_Text" path="textures/Local/Buttons/start_text.png" group="MainMenu" upload="true"/>
+	</Textures>
+	<Sounds group="GardenSound"> 
+		<sample id="BubbleSplash_01" path="sounds/splash_01.ogg" mode="stream+cache" mix="5" volumeFactor="0.4" pan="-1"/>	
+		<sample id="BubbleSplash_02" path="sounds/splash_02.ogg" mode="stream+cache" mix="5" volumeFactor="0.4" pan="-1"/>	
+		<sample id="BubbleSplash_03" path="sounds/splash_03.ogg" mode="stream+cache" mix="5" volumeFactor="0.4" pan="-1"/>	
+		<sample id="Shot_01" path="sounds/shot_01.ogg" mode="stream+cache" volumeFactor="0.3" mix="5" pan="-1"/>	
+		<sample id="Shot_02" path="sounds/shot_02.ogg" mode="stream+cache" volumeFactor="0.3" mix="5" pan="-1"/>	
+		<sample id="Miss" path="sounds/miss.ogg" mode="stream+cache" mix="5" pan="-1"/>	
+	</Sounds>
+</Resources>

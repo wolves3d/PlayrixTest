@@ -1,0 +1,7 @@
+CountTarget=20
+Speed=500
+Time=50
+# custom settings --------------------------
+EnableSound=0
+BubbleSpeed=50
+SpeedSpread=50

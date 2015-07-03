@@ -1,0 +1,10 @@
+/Debug
+/Release
+/_tools
+/engine
+/ipch
+/libs
+/*.sdf
+/*.suo
+/*.user
+/bin/*.pdb
