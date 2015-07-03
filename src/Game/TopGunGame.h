@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "UniformGrid.h"
+#include "GameStates/BaseState.h"
 
 
 class CTopGunGame : public IUniformGridDelegate
@@ -20,7 +21,11 @@ public:
 	void AddNode(CGameNode * node);
 	void RemoveNode(CGameNode * node);
 
-private:
+	CStateManager & GetStateManager() { return m_stateMgr; }
+
+	uint GetStageTime();
+
+//private:
 	void CreateBubbles();
 	void TestBorders();
 
@@ -31,6 +36,7 @@ private:
 
 	void OnBounce(CGameNode * node, const Vector3 & newDirection);
 	void OnCollision(CGameNode * nodeA, CGameNode * nodeB);
+
 
 	CScene m_scene;
 	vector <CGameNode *> m_gameNodes;
@@ -52,13 +58,19 @@ private:
 		BULLET_TAG = 2,
 	};
 
-	// Game parametrs
+	// Game parameters
 
 	uint m_bubbleCount;
 	uint m_bubbleSpeed;
 	int m_bubbleSpeedSpread;
 	int m_bulletSpeed;
 	uint m_stageTime;
+
+	bool m_isGameStarted;
+	float m_gameTime;
+	float m_gameDeadline;
+
+	CStateManager m_stateMgr;
 };
 
 

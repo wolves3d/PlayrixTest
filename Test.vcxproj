@@ -138,6 +138,12 @@
     <ClInclude Include="src\Framework\SpriteNode.h" />
     <ClInclude Include="src\Framework\UniformGrid.h" />
     <ClInclude Include="src\Game\Bubble.h" />
+    <ClInclude Include="src\Game\GameStates\BaseState.h" />
+    <ClInclude Include="src\Game\GameStates\GameTitle.h" />
+    <ClInclude Include="src\Game\GameStates\GetReady.h" />
+    <ClInclude Include="src\Game\GameStates\MainGame.h" />
+    <ClInclude Include="src\Game\GameStates\TimesIsUp.h" />
+    <ClInclude Include="src\Game\GameStates\YouWin.h" />
     <ClInclude Include="src\Game\TopGunGame.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\TestApplication.h" />

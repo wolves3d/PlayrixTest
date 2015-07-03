@@ -3,6 +3,9 @@
 #include "Bubble.h"
 #include "AudioWrapper.h"
 
+#include "GameStates/GameTitle.h"
+#include "GameStates/TimesIsUp.h"
+
 
 CTopGunGame * g_Game = NULL;
 
@@ -16,6 +19,8 @@ CTopGunGame::CTopGunGame()
 	, m_bubbleSpeed(50)
 	, m_bubbleSpeedSpread(30)
 	, m_stageTime(50)
+	, m_isGameStarted(false)
+	, m_gameTime(0)
 {
 	g_Game = this;
 }
@@ -31,7 +36,8 @@ void CTopGunGame::Init()
 	m_bulletTexture = Core::resourceManager.Get<Render::Texture>("cur_normal");
 
 	ReadConfig();
-	CreateBubbles();
+
+	m_stateMgr.PushState(new CGameTitle());
 }
 
 
@@ -86,6 +92,8 @@ void CTopGunGame::ReadConfig()
 
 void CTopGunGame::Update(float dt)
 {
+	m_gameTime += dt;
+
 	TestBorders();
 
 	// will call ProcessNeighbourNodes callback many times
@@ -93,6 +101,24 @@ void CTopGunGame::Update(float dt)
 	
 	m_scene.Update(dt);
 	m_effectsContainer.Update(dt);
+
+	CBaseState * state = m_stateMgr.GetState();
+	if (NULL != state)
+		state->OnUpdate(dt);
+
+	m_stateMgr.Update();
+
+	// Time's up test ----------------------------------------------------------
+
+	if (true == m_isGameStarted)
+	{
+		if (0 == GetStageTime())
+		{
+			m_isGameStarted = false;
+			m_stateMgr.PopState();
+			m_stateMgr.PushState(new CTimeIsUp());
+		}
+	}
 }
 
 
@@ -100,6 +126,10 @@ void CTopGunGame::Draw()
 {
 	m_scene.Draw();
 	m_effectsContainer.Draw();
+
+	CBaseState * state = m_stateMgr.GetState();
+	if (NULL != state)
+		state->OnDraw();
 }
 
 
@@ -129,8 +159,24 @@ void CTopGunGame::RemoveNode(CGameNode * node)
 }
 
 
+uint CTopGunGame::GetStageTime()
+{
+	if (m_gameDeadline > m_gameTime)
+	{
+		return (uint)(m_gameDeadline - m_gameTime);
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+
 void CTopGunGame::CreateBubbles()
 {
+	m_isGameStarted = true;
+	m_gameDeadline = (m_gameTime + m_stageTime);
+
 	const int screenWidth = Render::device.Width();
 	const int screenHeight = Render::device.Height();
 
@@ -138,7 +184,8 @@ void CTopGunGame::CreateBubbles()
 	{
 		CBubble * bubble = new CBubble;
 		bubble->InitWithTexture(m_bubbleTexture);
-		bubble->SetPosition(RND_INTERVAL(0, screenWidth), RND_INTERVAL(0, screenHeight));
+		//bubble->SetPosition(RND_INTERVAL(0, screenWidth), RND_INTERVAL(0, screenHeight));
+		bubble->SetPosition((0.5f * screenWidth), (0.5f * screenHeight));
 		bubble->SetScale(RND_INTERVAL(0.2f, 0.55f));
 		bubble->SetTag(BUBBLE_TAG);
 		
@@ -274,11 +321,18 @@ void CTopGunGame::TestBorders()
 
 void CTopGunGame::OnMouseMove()
 {
-	if (Core::mainInput.GetMouseLeftButton())
+	CBaseState * state = m_stateMgr.GetState();
+	if (NULL != state)
+		state->OnMouse();
+
+	if (true == m_isGameStarted)
 	{
-		if (false == IsWeaponCooldown())
+		if (Core::mainInput.GetMouseLeftButton())
 		{
-			OnShot(Core::mainInput.GetMousePos());
+			if (false == IsWeaponCooldown())
+			{
+				OnShot(Core::mainInput.GetMousePos());
+			}
 		}
 	}
 }

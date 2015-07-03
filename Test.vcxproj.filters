@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{1ed96644-66b8-46c9-a9ac-8e9db4e32530}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GameStates">
+      <UniqueIdentifier>{f7352ea5-83d6-49a1-ad68-96a0f745d26b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -97,6 +100,24 @@
     </ClInclude>
     <ClInclude Include="src\Framework\AudioWrapper.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameStates\BaseState.h">
+      <Filter>Source Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameStates\GameTitle.h">
+      <Filter>Source Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameStates\GetReady.h">
+      <Filter>Source Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameStates\TimesIsUp.h">
+      <Filter>Source Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameStates\YouWin.h">
+      <Filter>Source Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameStates\MainGame.h">
+      <Filter>Source Files\GameStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
