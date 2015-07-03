@@ -5,6 +5,7 @@
 
 #include "GameStates/GameTitle.h"
 #include "GameStates/TimesIsUp.h"
+#include "GameStates/YouWin.h"
 
 
 CTopGunGame * g_Game = NULL;
@@ -14,13 +15,15 @@ CTopGunGame::CTopGunGame()
 	: m_weaponCulldownDeadline(0)
 	, m_bubbleTexture(NULL)
 	, m_bulletTexture(NULL)
-	, m_bubbleCount(200)
+	, m_maxBubbleCount(200)
 	, m_bulletSpeed(200)
 	, m_bubbleSpeed(50)
 	, m_bubbleSpeedSpread(30)
 	, m_stageTime(50)
 	, m_isGameStarted(false)
 	, m_gameTime(0)
+	, m_enableCollisions(true)
+	, m_bubbleCount(0)
 {
 	g_Game = this;
 }
@@ -64,7 +67,7 @@ void CTopGunGame::ReadConfig()
 
 		if ("CountTarget" == name)
 		{
-			m_bubbleCount = utils::lexical_cast<uint>(value);
+			m_maxBubbleCount = utils::lexical_cast<uint>(value);
 		}
 		else if ("Speed" == name)
 		{
@@ -94,10 +97,13 @@ void CTopGunGame::Update(float dt)
 {
 	m_gameTime += dt;
 
-	TestBorders();
+	if (true == m_enableCollisions)
+	{
+		TestBorders();
 
-	// will call ProcessNeighbourNodes callback many times
-	m_grid.Collide(&m_collisionVector, this);
+		// will call ProcessNeighbourNodes callback many times
+		m_grid.Collide(&m_collisionVector, this);
+	}
 	
 	m_scene.Update(dt);
 	m_effectsContainer.Update(dt);
@@ -112,7 +118,13 @@ void CTopGunGame::Update(float dt)
 
 	if (true == m_isGameStarted)
 	{
-		if (0 == GetStageTime())
+		if (0 == m_bubbleCount)
+		{
+			m_isGameStarted = false;
+			m_stateMgr.PopState();
+			m_stateMgr.PushState(new CYouWin());
+		}
+		else if (0 == GetStageTime())
 		{
 			m_isGameStarted = false;
 			m_stateMgr.PopState();
@@ -159,6 +171,22 @@ void CTopGunGame::RemoveNode(CGameNode * node)
 }
 
 
+void CTopGunGame::RemoveAllNodes()
+{
+	uint i = m_gameNodes.size();
+	while (i--)
+	{
+		CGameNode * node = m_gameNodes[i];
+		m_gameNodes.erase(m_gameNodes.begin() + i);
+
+		m_scene.RemoveNode(node);
+		m_grid.RemoveBody(node);
+
+		delete node;
+	}
+}
+
+
 uint CTopGunGame::GetStageTime()
 {
 	if (m_gameDeadline > m_gameTime)
@@ -174,13 +202,17 @@ uint CTopGunGame::GetStageTime()
 
 void CTopGunGame::CreateBubbles()
 {
+	RemoveAllNodes();
+
+	m_bubbleCount = 0;
 	m_isGameStarted = true;
+	m_enableCollisions = true;
 	m_gameDeadline = (m_gameTime + m_stageTime);
 
 	const int screenWidth = Render::device.Width();
 	const int screenHeight = Render::device.Height();
 
-	for (uint i = 0; i < m_bubbleCount; ++i)
+	for (uint i = 0; i < m_maxBubbleCount; ++i)
 	{
 		CBubble * bubble = new CBubble;
 		bubble->InitWithTexture(m_bubbleTexture);
@@ -203,7 +235,12 @@ void CTopGunGame::CreateBubbles()
 		body->SetRadius(64);
 
 		AddNode(bubble);
+
+		++m_bubbleCount;
 	}
+
+	// Playrix connection bug workaround
+	m_scene.Update(0);
 }
 
 
@@ -442,5 +479,38 @@ void CTopGunGame::OnCollision(CGameNode * nodeA, CGameNode * nodeB)
 	splashVFX->Finish();
 
 	bubble->Kill();
+	--m_bubbleCount;
+
 	bullet->Kill();
+}
+
+
+void CTopGunGame::ShrinkBubbles()
+{
+	m_enableCollisions = false;
+
+	const Vector3 screenCenter(
+		(Render::device.Width() / 2),
+		(Render::device.Height() / 2), 0);
+
+
+	uint i = m_gameNodes.size();
+	while (i--)
+	{
+		CGameNode * node = m_gameNodes[i];
+		CRigidBody * body = node->GetBody();
+
+
+		const Vector3 nodePos = node->GetPosition();
+		Vector3 newSpeed = (screenCenter - nodePos);
+
+		const float flyTime = 0.1f;
+		const float flyDistance = newSpeed.Length();
+
+		newSpeed.Normalize();
+		newSpeed *= (flyDistance / flyTime);
+
+
+		body->SetSpeed(newSpeed);
+	}
 }

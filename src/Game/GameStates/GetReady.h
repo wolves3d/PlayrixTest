@@ -41,6 +41,7 @@ public:
 		if (m_blinkCount > 4)
 		{
 			m_readyToGo = true;
+			g_Game->ShrinkBubbles();
 		}
 	}
 

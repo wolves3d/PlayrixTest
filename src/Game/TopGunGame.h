@@ -25,9 +25,14 @@ public:
 
 	uint GetStageTime();
 
-//private:
+
+	void ShrinkBubbles();
 	void CreateBubbles();
+
+private:
+
 	void TestBorders();
+	void RemoveAllNodes();
 
 	virtual void ProcessNeighbourNodes(NodeVector * nodeVector);
 
@@ -60,6 +65,7 @@ public:
 
 	// Game parameters
 
+	uint m_maxBubbleCount;
 	uint m_bubbleCount;
 	uint m_bubbleSpeed;
 	int m_bubbleSpeedSpread;
@@ -67,6 +73,7 @@ public:
 	uint m_stageTime;
 
 	bool m_isGameStarted;
+	bool m_enableCollisions;
 	float m_gameTime;
 	float m_gameDeadline;
 
