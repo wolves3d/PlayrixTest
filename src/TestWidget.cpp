@@ -158,6 +158,7 @@ void TestWidget::Draw()
 
 void TestWidget::Update(float dt)
 {
+	m_game.OnMouseMove();
 	m_game.Update(dt);
 	//
 	// Обновим контейнер с эффектами
