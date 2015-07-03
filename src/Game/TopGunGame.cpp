@@ -92,7 +92,7 @@ void CTopGunGame::ReadConfig()
 		{
 			m_bubbleSpeedSpread = utils::lexical_cast<int>(value);
 		}
-		else if ("EnableSound")
+		else if ("EnableSound" == name)
 		{
 			AudioWrapper::SetEnabled(utils::lexical_cast<bool>(value));
 		}
@@ -514,7 +514,7 @@ void CTopGunGame::OnCollision(CGameNode * nodeA, CGameNode * nodeB)
 	AudioWrapper::Play(sampleName.c_str());
 
 	// vfx
-	ParticleEffect * splashVFX = m_effectsContainer.AddEffect("FindItem2");
+	ParticleEffect * splashVFX = m_effectsContainer.AddEffect("FindCoin2");
 	splashVFX->SetPos(bubble->GetPosition().x, bubble->GetPosition().y);
 	splashVFX->Reset();
 	splashVFX->Finish();
