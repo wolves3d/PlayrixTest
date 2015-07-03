@@ -1,6 +1,6 @@
-CountTarget=20
+CountTarget=100
 Speed=500
-Time=5
+Time=50
 # custom settings --------------------------
 EnableSound=0
 BubbleSpeed=50

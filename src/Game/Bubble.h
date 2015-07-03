@@ -8,7 +8,14 @@
 class CBubble : public CGameNode
 {
 public:
+	CBubble();
 	virtual void Update(float dt);
+	virtual void Kill();
+
+	void SetEffect(ParticleEffect * effect) { m_effect = effect; }
+
+private:
+	ParticleEffect * m_effect;
 };
 
 

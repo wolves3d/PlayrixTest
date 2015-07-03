@@ -19,7 +19,7 @@ public:
 	const int GetTag() const { return m_tag; }
 	void SetTag(int tag) { m_tag = tag; }
 
-	void Kill() { m_killFlag = true; }
+	virtual void Kill() { m_killFlag = true; }
 
 private:
 	CRigidBody m_body;

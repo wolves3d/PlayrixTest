@@ -15,7 +15,6 @@ void CGameNode::Update(float dt)
 	if (true == m_killFlag)
 	{
 		g_Game->RemoveNode(this);
-		// FIXME: clean me here!
 		return;
 	}
 

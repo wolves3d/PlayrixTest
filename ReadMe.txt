@@ -1,10 +1,10 @@
 Features
-# Particle effects (bullet, bang, cannon, grenade)
-# ??? needStartDeadCounter
 # canon
+# Particle effects (cannon)
+# ??? needStartDeadCounter
 
 Add features
-# grenades
+# sounds for states
 
 Bugs
 # Too long miss sound

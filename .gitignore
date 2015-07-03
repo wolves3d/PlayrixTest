@@ -10,3 +10,4 @@
 /bin/*.pdb
 /bin/*.ilk
 /*.opensdf
+/write_directory/log.htm

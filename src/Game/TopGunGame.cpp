@@ -412,6 +412,12 @@ void CTopGunGame::OnShot(const IPoint & targetPoint)
 	bullet->SetScale(0.7f);
 	bullet->SetTag(BULLET_TAG);
 
+	ParticleEffect * trail = m_effectsContainer.AddEffect("Iskra");
+	trail->SetPos(spawnPos.x, spawnPos.y);
+	trail->Reset();
+	//trail->Finish();
+	bullet->SetEffect(trail);
+
 	Vector3 dir(Vector3(targetPoint) - spawnPos);
 	const float shootDistance = dir.Length();
 	dir.Normalize();
@@ -429,6 +435,12 @@ void CTopGunGame::OnShot(const IPoint & targetPoint)
 	string sampleName("Shot_0");
 	sampleName += utils::lexical_cast((int)RND_INTERVAL(1.0f, 2.5f));
 	AudioWrapper::Play(sampleName.c_str());
+
+	// cannon bang vfx
+	ParticleEffect * splashVFX = m_effectsContainer.AddEffect("Iskra");
+	splashVFX->SetPos(spawnPos.x, spawnPos.y);
+	splashVFX->Reset();
+	splashVFX->Finish();
 }
 
 
@@ -478,10 +490,12 @@ void CTopGunGame::OnCollision(CGameNode * nodeA, CGameNode * nodeB)
 	splashVFX->Reset();
 	splashVFX->Finish();
 
-	bubble->Kill();
-	--m_bubbleCount;
-
+	m_grid.RemoveBody(bullet);
 	bullet->Kill();
+
+	m_grid.RemoveBody(bubble);
+	bubble->Kill();
+	--m_bubbleCount;	
 }
 
 
@@ -500,6 +514,11 @@ void CTopGunGame::ShrinkBubbles()
 		CGameNode * node = m_gameNodes[i];
 		CRigidBody * body = node->GetBody();
 
+		if (BULLET_TAG == node->GetTag())
+		{
+			node->Kill();
+			continue;
+		}
 
 		const Vector3 nodePos = node->GetPosition();
 		Vector3 newSpeed = (screenCenter - nodePos);
