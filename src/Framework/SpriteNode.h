@@ -24,6 +24,8 @@ public:
 	void SetScale(float scale) { m_scale = scale; m_isMatrixDirty = true; }
 	float GetScale() const { return m_scale; }
 
+	Matrix4 & GetMatrix() { return m_worldMatrix; }
+
 protected:
 	float m_scale;
 	float m_angle;

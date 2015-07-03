@@ -38,6 +38,7 @@ private:
 
 	bool IsWeaponCooldown() const;
 	void OnShot(const IPoint & targetPoint);
+	void RotateCannon();
 
 	void OnBounce(CGameNode * node, const Vector3 & newDirection);
 	void OnCollision(CGameNode * nodeA, CGameNode * nodeB);
@@ -54,7 +55,9 @@ private:
 	// texture cache
 	Render::Texture * m_bubbleTexture;
 	Render::Texture * m_bulletTexture;
+	Render::Texture * m_cannonTexture;
 
+	CGameNode * m_cannonNode;
 	EffectsContainer m_effectsContainer;
 
 	enum ENodeTag

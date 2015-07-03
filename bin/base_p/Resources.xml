@@ -9,6 +9,7 @@
 		<texture id="Circle" path="textures/circle.png" group="TestGroup" upload="false"/>
 		<texture id="cur_normal" path="textures/cur_normal.png" group="TestGroup" upload="false"/>
 		<texture id="btnStart_Text" path="textures/Local/Buttons/start_text.png" group="MainMenu" upload="true"/>
+		<texture id="Cannon" path="textures/cannon.png" group="MainMenu" upload="true"/>
 	</Textures>
 	<Sounds group="GardenSound"> 
 		<sample id="BubbleSplash_01" path="sounds/splash_01.ogg" mode="stream+cache" mix="5" volumeFactor="0.4" pan="-1"/>	

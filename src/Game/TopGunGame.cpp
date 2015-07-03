@@ -15,6 +15,7 @@ CTopGunGame::CTopGunGame()
 	: m_weaponCulldownDeadline(0)
 	, m_bubbleTexture(NULL)
 	, m_bulletTexture(NULL)
+	, m_cannonTexture(NULL)
 	, m_maxBubbleCount(200)
 	, m_bulletSpeed(200)
 	, m_bubbleSpeed(50)
@@ -24,6 +25,7 @@ CTopGunGame::CTopGunGame()
 	, m_gameTime(0)
 	, m_enableCollisions(true)
 	, m_bubbleCount(0)
+	, m_cannonNode(NULL)
 {
 	g_Game = this;
 }
@@ -37,10 +39,19 @@ void CTopGunGame::Init()
 
 	m_bubbleTexture = Core::resourceManager.Get<Render::Texture>("Circle");
 	m_bulletTexture = Core::resourceManager.Get<Render::Texture>("cur_normal");
+	m_cannonTexture = Core::resourceManager.Get<Render::Texture>("Cannon");
 
 	ReadConfig();
 
 	m_stateMgr.PushState(new CGameTitle());
+
+	// --
+
+	m_cannonNode = new CGameNode();
+	m_cannonNode->InitWithTexture(m_cannonTexture);
+	m_cannonNode->SetAnchorPoint(0, 0.5f);
+	m_cannonNode->SetPosition(0.5f * screenWidth, -20);
+	m_scene.AddNode(m_cannonNode);
 }
 
 
@@ -114,6 +125,8 @@ void CTopGunGame::Update(float dt)
 
 	m_stateMgr.Update();
 
+	RotateCannon();
+
 	// Time's up test ----------------------------------------------------------
 
 	if (true == m_isGameStarted)
@@ -131,6 +144,18 @@ void CTopGunGame::Update(float dt)
 			m_stateMgr.PushState(new CTimeIsUp());
 		}
 	}
+}
+
+
+void CTopGunGame::RotateCannon()
+{
+	Vector3 targetPoint = Core::mainInput.GetMousePos();
+	Vector3 spawnPos = m_cannonNode->GetPosition();
+
+	Vector3 dir(Vector3(targetPoint) - spawnPos);
+	dir.Normalize();
+	const float angle = -atan2f(dir.y, dir.x);
+	m_cannonNode->SetRotation(angle);
 }
 
 
@@ -404,7 +429,11 @@ void CTopGunGame::OnShot(const IPoint & targetPoint)
 {
 	m_weaponCulldownDeadline = GetTickCount() + 200; // culldown
 
-	const Vector3 spawnPos(Render::device.Width() * 0.5f, 50, 0);
+	Vector3 cannonGunPoint(100, 16, 0);
+	const Vector3 spawnPos = cannonGunPoint.TransformCoord(m_cannonNode->GetMatrix());
+	//const Vector3 spawnPos = m_cannonNode->GetPosition() + cannonGunPoint;
+
+	//const Vector3 spawnPos(Render::device.Width() * 0.5f, 50, 0);
 	CBubble * bullet = new CBubble;
 	bullet->InitWithTexture(m_bulletTexture);
 	bullet->SetPosition(spawnPos);
