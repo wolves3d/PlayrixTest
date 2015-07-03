@@ -1,9 +1,9 @@
-Features
-# Particle effects (cannon)
-# ??? needStartDeadCounter
-
-Add features
-# sounds for states
-
 Bugs
+# Crashes out of screen (back shot)
+
+Features
 # Too long miss sound
+# remove GetTickCount
+
+WountFix
+# Particle effects (cannon)

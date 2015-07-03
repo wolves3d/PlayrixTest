@@ -20,6 +20,7 @@ public:
 	virtual void OnEnter()
 	{
 		m_blinkDeadline = -1;
+		AudioWrapper::Play("GetReady");
 	}
 
 	virtual void OnUpdate(float dt)

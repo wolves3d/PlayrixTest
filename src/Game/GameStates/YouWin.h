@@ -12,6 +12,7 @@ public:
 
 	virtual void OnEnter()
 	{
+		AudioWrapper::Play("Win");
 		m_exitTime = (m_time + 1.0f);
 	}
 

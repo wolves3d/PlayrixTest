@@ -13,6 +13,7 @@ public:
 	virtual void OnEnter()
 	{
 		m_exitTime = (m_time + 1.0f);
+		AudioWrapper::Play("TimeIsUp");
 	}
 
 	virtual void OnDraw()

@@ -15,8 +15,12 @@
 		<sample id="BubbleSplash_01" path="sounds/splash_01.ogg" mode="stream+cache" mix="5" volumeFactor="0.4" pan="-1"/>	
 		<sample id="BubbleSplash_02" path="sounds/splash_02.ogg" mode="stream+cache" mix="5" volumeFactor="0.4" pan="-1"/>	
 		<sample id="BubbleSplash_03" path="sounds/splash_03.ogg" mode="stream+cache" mix="5" volumeFactor="0.4" pan="-1"/>	
-		<sample id="Shot_01" path="sounds/shot_01.ogg" mode="stream+cache" volumeFactor="0.3" mix="5" pan="-1"/>	
-		<sample id="Shot_02" path="sounds/shot_02.ogg" mode="stream+cache" volumeFactor="0.3" mix="5" pan="-1"/>	
-		<sample id="Miss" path="sounds/miss.ogg" mode="stream+cache" mix="5" pan="-1"/>	
+		<sample id="Shot_01" path="sounds/shot_01.ogg" mode="stream+cache" volumeFactor="0.1" mix="5" pan="-1"/>	
+		<sample id="Shot_02" path="sounds/shot_02.ogg" mode="stream+cache" volumeFactor="0.1" mix="5" pan="-1"/>	
+		<sample id="Miss" path="sounds/miss.ogg" mode="stream+cache" volumeFactor="0.3" mix="5" pan="-1"/>
+		
+		<sample id="GetReady" path="sounds/get_ready.ogg" mode="stream" volumeFactor="1.0" mix="5" pan="-1"/>
+		<sample id="TimeIsUp" path="sounds/time_up.ogg" mode="stream" volumeFactor="1.0" mix="5" pan="-1"/>
+		<sample id="Win" path="sounds/win.ogg" mode="stream" volumeFactor="1.0" mix="5" pan="-1"/>
 	</Sounds>
 </Resources>
