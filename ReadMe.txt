@@ -1,5 +1,4 @@
 Features
-# canon
 # Particle effects (cannon)
 # ??? needStartDeadCounter
 

@@ -11,3 +11,4 @@
 /bin/*.ilk
 /*.opensdf
 /write_directory/log.htm
+/bin/write_directory/log.htm
