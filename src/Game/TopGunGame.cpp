@@ -35,7 +35,7 @@ void CTopGunGame::Init()
 {
 	const int screenWidth = Render::device.Width();
 	const int screenHeight = Render::device.Height();
-	m_grid.InitGridMap(screenWidth, screenHeight, 200);
+	m_grid.InitGridMap(screenWidth, screenHeight, 100);
 
 	m_bubbleTexture = Core::resourceManager.Get<Render::Texture>("Circle");
 	m_bulletTexture = Core::resourceManager.Get<Render::Texture>("cur_normal");
