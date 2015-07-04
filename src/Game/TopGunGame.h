@@ -37,7 +37,7 @@ private:
 	virtual void ProcessNeighbourNodes(NodeVector * nodeVector);
 
 	bool IsWeaponCooldown() const;
-	void OnShot(const IPoint & targetPoint);
+	void OnShot(const IPoint & targetPoint, bool isSniper);
 	void RotateCannon();
 
 	void OnBounce(CGameNode * node, const Vector3 & newDirection);
@@ -50,7 +50,7 @@ private:
 	CUniformGrid m_grid;
 	NodeVector m_collisionVector;
 
-	uint m_weaponCulldownDeadline;
+	float m_weaponCulldownDeadline;
 
 	// texture cache
 	Render::Texture * m_bubbleTexture;

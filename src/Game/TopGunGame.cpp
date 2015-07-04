@@ -154,8 +154,11 @@ void CTopGunGame::RotateCannon()
 
 	Vector3 dir(Vector3(targetPoint) - spawnPos);
 	dir.Normalize();
-	const float angle = -atan2f(dir.y, dir.x);
-	m_cannonNode->SetRotation(angle);
+
+	float angle = fabsf(atan2f(dir.y, dir.x));
+	angle = math::max(0.2617f, math::min(angle, 2.8797f)); // limit to 15° gorizont
+
+	m_cannonNode->SetRotation(-angle);
 }
 
 
@@ -232,6 +235,9 @@ void CTopGunGame::CreateBubbles()
 	m_bubbleCount = 0;
 	m_isGameStarted = true;
 	m_enableCollisions = true;
+
+	m_gameTime = 0;
+	m_weaponCulldownDeadline = 0;
 	m_gameDeadline = (m_gameTime + m_stageTime);
 
 	const int screenWidth = Render::device.Width();
@@ -389,11 +395,11 @@ void CTopGunGame::OnMouseMove()
 
 	if (true == m_isGameStarted)
 	{
-		if (Core::mainInput.GetMouseLeftButton())
+		if (Core::mainInput.GetMouseLeftButton() || Core::mainInput.GetMouseRightButton())
 		{
 			if (false == IsWeaponCooldown())
 			{
-				OnShot(Core::mainInput.GetMousePos());
+				OnShot(Core::mainInput.GetMousePos(), Core::mainInput.GetMouseRightButton());
 			}
 		}
 	}
@@ -405,7 +411,7 @@ bool CTopGunGame::IsWeaponCooldown() const
 	if (0 == m_weaponCulldownDeadline)
 		return false;
 
-	return (GetTickCount() < m_weaponCulldownDeadline);
+	return (m_gameTime < m_weaponCulldownDeadline);
 }
 
 
@@ -421,13 +427,32 @@ void CTopGunGame::OnBounce(CGameNode * node, const Vector3 & newDirection)
 		node->SetRotation(angle);
 	
 		AudioWrapper::Play("Miss");
+
+
+
+		int collisionCount = node->GetUserData();
+		--collisionCount;
+
+		if (collisionCount < 0)
+		{
+			node->Kill();
+		}
+		else
+		{
+			// only one bouce allowed
+			node->SetUserData(0);
+		}
 	}
 }
 
 
-void CTopGunGame::OnShot(const IPoint & targetPoint)
+void CTopGunGame::OnShot(const IPoint & targetPoint, bool isSniper)
 {
-	m_weaponCulldownDeadline = GetTickCount() + 200; // culldown
+	float culldownTime = (true == isSniper)
+		? 0.8f
+		: 0.2f;
+
+	m_weaponCulldownDeadline = (m_gameTime + culldownTime); // culldown
 
 	Vector3 cannonGunPoint(100, 16, 0);
 	const Vector3 spawnPos = cannonGunPoint.TransformCoord(m_cannonNode->GetMatrix());
@@ -455,8 +480,17 @@ void CTopGunGame::OnShot(const IPoint & targetPoint)
 
 	CRigidBody * body = bullet->GetBody();
 	body->SetWeight(1.0f);
-	body->SetSpeed(dir * (float)m_bulletSpeed);
 	body->SetRadius(1);
+	body->SetSpeed(dir * (float)m_bulletSpeed);
+
+	if (true == isSniper)
+		body->SetSpeed(2 * body->GetSpeed());
+
+	const int collisionCount = (true == isSniper)
+		? 5
+		: 1;
+
+	bullet->SetUserData(collisionCount);
 
 	AddNode(bullet);
 
@@ -519,12 +553,21 @@ void CTopGunGame::OnCollision(CGameNode * nodeA, CGameNode * nodeB)
 	splashVFX->Reset();
 	splashVFX->Finish();
 
-	m_grid.RemoveBody(bullet);
-	bullet->Kill();
-
 	m_grid.RemoveBody(bubble);
 	bubble->Kill();
-	--m_bubbleCount;	
+	--m_bubbleCount;
+
+	// bullet life time
+
+	int collisionCount = bullet->GetUserData();
+	bullet->SetUserData(--collisionCount);
+
+	if (collisionCount < 1)
+	{
+		m_grid.RemoveBody(bullet);
+		bullet->Kill();
+	}
+
 }
 
 
@@ -550,9 +593,9 @@ void CTopGunGame::ShrinkBubbles()
 		}
 
 		const Vector3 nodePos = node->GetPosition();
-		Vector3 newSpeed = (screenCenter - nodePos);
+		Vector3 newSpeed = (nodePos - screenCenter);
 
-		const float flyTime = 0.1f;
+		const float flyTime = 0.2f;
 		const float flyDistance = newSpeed.Length();
 
 		newSpeed.Normalize();

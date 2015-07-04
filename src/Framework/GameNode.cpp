@@ -6,6 +6,7 @@
 CGameNode::CGameNode()
 	: m_gridIndex(-1)
 	, m_tag(0)
+	, m_userData(0)
 	, m_killFlag(false)
 {}
 

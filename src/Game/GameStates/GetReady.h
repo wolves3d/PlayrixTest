@@ -39,10 +39,13 @@ public:
 			}
 		}
 
-		if (m_blinkCount > 4)
+		if (false == m_readyToGo)
 		{
-			m_readyToGo = true;
-			g_Game->ShrinkBubbles();
+			if (m_blinkCount > 4)
+			{
+				m_readyToGo = true;
+				g_Game->ShrinkBubbles();
+			}
 		}
 	}
 

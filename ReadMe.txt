@@ -1,9 +1,6 @@
-Bugs
-# Crashes out of screen (back shot)
-
-Features
-# Too long miss sound
-# remove GetTickCount
+Mouse - aim
+left mouse - normal shot
+right mouse - sniper shot (more power and more reload time)
 
 WountFix
-# Particle effects (cannon)
+# Particle effects

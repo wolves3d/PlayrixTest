@@ -25,11 +25,12 @@ void TestWidget::Init()
 
 void TestWidget::Draw()
 {
+
 	//
 	// Получаем текущее положение курсора мыши.
 	//
 	IPoint mouse_pos = Core::mainInput.GetMousePos();
-
+	/*
 	//
 	// Проталкиваем в стек текущее преобразование координат, чтобы в дальнейшем
 	// можно было восстановить это преобразование вызовом PopMatrix.
@@ -128,7 +129,7 @@ void TestWidget::Draw()
 	// Рисуем все эффекты, которые добавили в контейнер (Update() для контейнера вызывать не нужно).
 	//
 	_effCont.Draw();
-
+*/
 	m_game.Draw();
 
 	// debug -------------------------------------------------------------------
@@ -152,8 +153,8 @@ void TestWidget::Draw()
 	}
 
 	Render::BindFont("arial");
-	Render::PrintString(900 + 100 / 2, 35, utils::lexical_cast(mouse_pos.x) + ", " + utils::lexical_cast(mouse_pos.y), 1.f, LeftAlign);
-	Render::PrintString(900 + 100 / 2, 15, string("FPS: ") + utils::lexical_cast(fps), 1.f, LeftAlign);
+//	Render::PrintString(900 + 100 / 2, 35, utils::lexical_cast(mouse_pos.x) + ", " + utils::lexical_cast(mouse_pos.y), 1.f, LeftAlign);
+	Render::PrintString(950, 15, string("FPS: ") + utils::lexical_cast(fps), 1.f, LeftAlign);
 }
 
 void TestWidget::Update(float dt)

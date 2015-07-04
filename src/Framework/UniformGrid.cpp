@@ -23,15 +23,12 @@ void CUniformGrid::InitGridMap(float width, float height, float cellSize)
 
 	const uint cellCount = (m_Width * m_Height);
 
-	//CC_SAFE_DELETE(m_GridArray);
 	m_GridArray = new NodeVector[cellCount];
 }
 
 
 void CUniformGrid::CellCoordFromMapPoint(int * outX, int * outY, const Vector3 & mapPoint)
 {
-// 	(*outX) = (int)floorf((mapPoint.x + (0.5f * m_gridMapWidth)) / m_CellSize);
-// 	(*outY) = (int)floorf((mapPoint.y + (0.5f * m_gridMapHeight)) / m_CellSize);
 
 	(*outX) = (int)floorf(mapPoint.x / m_CellSize);
 	(*outY) = (int)floorf(mapPoint.y / m_CellSize);
@@ -42,9 +39,6 @@ int CUniformGrid::GetCellIndex(const Vector3 & point)
 {
 	int x, y;
 	CellCoordFromMapPoint(&x, &y, point);
-
-// 	CC_ASSERT((x >= 0) && (x < m_Width));
-// 	CC_ASSERT((y >= 0) && (y < m_Height));
 
 	return ((y * m_Width) + x);
 }
@@ -82,8 +76,6 @@ void CUniformGrid::RemoveBody(CGameNode * node)
 		NodeVector * cellList = (m_GridArray + Idx);
 		NodeVector::iterator it = cellList->begin();
 
-	//	CC_ASSERT(cellList->size() > 0);
-
 		while (cellList->end() != it)
 		{
 			if (node == (*it))
@@ -94,10 +86,6 @@ void CUniformGrid::RemoveBody(CGameNode * node)
 
 			++it;
 		}
-
-
-		// Unit not found
-//		CC_ASSERT(false);
 	}
 }
 
@@ -168,7 +156,6 @@ void CUniformGrid::GetUnitsInRadius(NodeVector * dstVector, const Vector3 & poin
 	maxX = math::max(0, math::min(maxX, (m_Width - 1)));
 	maxY = math::max(0, math::min(maxY, (m_Height - 1)));
 
-	//const float radiusSq = (radius * radius);
 	dstVector->clear();
 
 	for (int y = minY; y <= maxY; ++y)
@@ -178,14 +165,6 @@ void CUniformGrid::GetUnitsInRadius(NodeVector * dstVector, const Vector3 & poin
 			// FIXME: non optimal - square, refactor me
 			NodeVector *  gridVector = GetCell(x, y);
 			dstVector->insert(dstVector->end(), gridVector->begin(), gridVector->end());
-
-			/*
-			if (radiusSq < ccpDistanceSQ(point, ))
-			{
-				UnitVector *  gridVector = GetCell(x, y);
-				outVector->insert(outVector->begin(), gridVector->begin(), gridVector->end());
-			}
-			*/
 		}
 	}
 }

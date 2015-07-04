@@ -19,12 +19,16 @@ public:
 	const int GetTag() const { return m_tag; }
 	void SetTag(int tag) { m_tag = tag; }
 
+	const int GetUserData() const { return m_userData; }
+	void SetUserData(int number) { m_userData = number; }
+
 	virtual void Kill() { m_killFlag = true; }
 
 private:
 	CRigidBody m_body;
 	int m_gridIndex;
 	int m_tag;
+	int m_userData;
 	bool m_killFlag;
 };
 
